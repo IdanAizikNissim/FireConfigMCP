@@ -8,9 +8,9 @@
 bun install
 ```
 
-### 2. Create and place `serviceAccount.json`
+### 2. Create and place service account files for each environment
 
-To allow the server to access Firebase Remote Config, you need a Google Cloud service account key file:
+To allow the server to access Firebase Remote Config, you need a Google Cloud service account key file for each environment you want to use (e.g., dev, stg, prod):
 
 #### A. Google Cloud Console (point‑and‑click)
 1. Open **IAM & Admin → Service Accounts** inside the same GCP project that owns your Firebase app.
@@ -22,15 +22,22 @@ To allow the server to access Firebase Remote Config, you need a Google Cloud se
    - Optionally add **Firebase Analytics Viewer** if your template conditions reference GA4 audiences.
 4. Finish → Done.
 5. In the list, click the account → **Keys** tab → **Add Key** → **Create new key** → **JSON**.
-6. Download the JSON file and place it in the project root as `serviceAccount.json`.
+6. Download the JSON file and place it in the project root as:
+   - `serviceAccount_dev.json` for your development environment
+   - `serviceAccount_stg.json` for your staging environment
+   - `serviceAccount_prod.json` for your production environment
 
-> **Note:** Do **not** commit `serviceAccount.json` to version control. It is already in `.gitignore`.
+> **Note:** Do **not** commit any `serviceAccount_*.json` files to version control. They are already in `.gitignore`.
 
-### 3. Run the server
+### 3. Run the server with one or more environments
+
+You can specify which environments to load by passing them as arguments. For example:
 
 ```bash
-bun run index.ts
+bun run index.ts dev stg prod
 ```
+
+This will load all three environments. You can specify any subset (e.g., just `dev`, or `stg prod`). If no arguments are provided, it defaults to `dev`.
 
 The server will start on port 3000 by default.
 
